@@ -20,13 +20,11 @@ jobs:
 
       - name: Sync dependencies
         run: |
-          cd skia
           python tools/git-sync-deps
         shell: pwsh
 
       - name: Generate cmake files
         run: |
-          cd skia
           bin/gn gen out/config --ide=json --json-ide-script=../../gn/gn_to_cmake.py
         shell: pwsh
 
