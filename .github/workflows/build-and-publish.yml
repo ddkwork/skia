@@ -13,6 +13,11 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: skia
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -20,13 +25,15 @@ jobs:
 
       - name: Sync dependencies
         run: |
-          python tools/git-sync-deps
+          python skia/tools/git-sync-deps
         shell: pwsh
+        working-directory: skia
 
       - name: Generate cmake files
         run: |
           bin/gn gen out/config --ide=json --json-ide-script=../../gn/gn_to_cmake.py
         shell: pwsh
+        working-directory: skia
 
       - name: Commit and push compressed file
         run: |
@@ -36,5 +43,6 @@ jobs:
           git commit -m "Add compressed skia artifact"
           git push
         shell: pwsh
+        working-directory: skia
         env:
           GITHUB_TOKEN: ${{ secrets.tk }}
